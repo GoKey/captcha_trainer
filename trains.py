@@ -86,7 +86,7 @@ def train_process(mode=RunMode.Trains):
         allow_soft_placement=True,
         log_device_placement=False,
         gpu_options=tf.GPUOptions(
-            allow_growth=True,  # it will cause fragmentation.
+            # allow_growth=True,  # it will cause fragmentation.
             per_process_gpu_memory_fraction=GPU_USAGE)
     )
     accuracy = 0
@@ -118,12 +118,13 @@ def train_process(mode=RunMode.Trains):
                     range(cur_batch * BATCH_SIZE, (cur_batch + 1) * BATCH_SIZE)
                 ]
                 if TRAINS_USE_TFRECORDS:
-                    batch_inputs, _, batch_labels = train_feeder.generate_batch_by_tfrecords(sess)
+                    batch_inputs, batch_seq_len, batch_labels = train_feeder.generate_batch_by_tfrecords(sess)
                 else:
-                    batch_inputs, _, batch_labels = train_feeder.generate_batch_by_index(index_list)
+                    batch_inputs, batch_seq_len, batch_labels = train_feeder.generate_batch_by_index(index_list)
 
                 feed = {
-                    model.batch_size: BATCH_SIZE,
+                    model.seq_len: batch_seq_len,
+                    # model.batch_size: BATCH_SIZE,
                     model.inputs: batch_inputs,
                     model.labels: batch_labels,
                 }
@@ -150,12 +151,12 @@ def train_process(mode=RunMode.Trains):
                             range(j * BATCH_SIZE, (j + 1) * BATCH_SIZE)
                         ]
                         if TRAINS_USE_TFRECORDS:
-                            val_inputs, _, val_labels = test_feeder.generate_batch_by_tfrecords(sess)
+                            val_inputs, batch_seq_len, val_labels = test_feeder.generate_batch_by_tfrecords(sess)
                         else:
-                            val_inputs, _, val_labels = test_feeder.generate_batch_by_index(index_val)
+                            val_inputs, batch_seq_len, val_labels = test_feeder.generate_batch_by_index(index_val)
 
                         val_feed = {
-                            model.batch_size: BATCH_SIZE,
+                            model.seq_len: batch_seq_len,
                             model.inputs: val_inputs,
                             model.labels: val_labels,
                         }

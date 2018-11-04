@@ -44,9 +44,9 @@ class DataIterator:
             if not k or not v:
                 break
             code.replace(k, v)
-
         code = code.lower() if 'LOWER' in CHAR_SET else code
         code = code.upper() if 'UPPER' in CHAR_SET else code
+        # return [SPACE_INDEX if code == SPACE_TOKEN else encode_maps()[c] for c in list(code)]
         return [encode_maps()[c] for c in list(code)]
 
     def read_sample_from_files(self, data_set=None):
@@ -129,7 +129,7 @@ class DataIterator:
 
     @staticmethod
     def _get_input_lens(sequences):
-        lengths = np.asarray([len(_) for _ in sequences], dtype=np.int64)
+        lengths = np.asarray([OUT_CHANNEL for _ in sequences], dtype=np.int64)
         return sequences, lengths
 
     def generate_batch_by_index(self, index):
@@ -157,6 +157,7 @@ def accuracy_calculation(original_seq, decoded_seq, ignore_value=-1):
     count = 0
     for i, origin_label in enumerate(original_seq):
         decoded_label = [j for j in decoded_seq[i] if j != ignore_value]
+        # print(len(origin_label), len(decoded_label), origin_label, decoded_label)
         if origin_label == decoded_label:
             count += 1
 

@@ -6,32 +6,38 @@
 CNN+LSTM+CTC:
   CNN:
     -
-      Convolution: 64
+      Convolution: [1, 32]
+      ConvCoreSize: 7
+      ConvStrides: 1
+      PoolWindowSize: 2
+      PoolStrides: 1
+    -
+      Convolution: [32, 64]
+      ConvCoreSize: 5
+      ConvStrides: 1
+      PoolWindowSize: 2
+      PoolStrides: 2
+    -
+      Convolution: [64, 128]
       ConvCoreSize: 3
       ConvStrides: 1
       PoolWindowSize: 2
       PoolStrides: 2
     -
-      Convolution: 128
+      Convolution: [128, 128]
       ConvCoreSize: 3
       ConvStrides: 1
       PoolWindowSize: 2
       PoolStrides: 2
     -
-      Convolution: 128
-      ConvCoreSize: 3
-      ConvStrides: 1
-      PoolWindowSize: 2
-      PoolStrides: 2
-    -
-      Convolution: 64
+      Convolution: [128, 64]
       ConvCoreSize: 3
       ConvStrides: 1
       PoolWindowSize: 2
       PoolStrides: 2
   LSTM:
     HiddenNum: 128
-    KeepProb: 0.8
+    KeepProb: 0.98
 
 # ModelName: Corresponding to the model file in the model directory,
 # - such as YourModelName.pb, fill in YourModelName here.

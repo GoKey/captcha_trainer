@@ -69,6 +69,9 @@ def char_set(_type):
 CHAR_SET = cf_model['Model'].get('CharSet')
 CHAR_EXCLUDE = cf_model['Model'].get('CharExclude')
 GEN_CHAR_SET = [i for i in char_set(CHAR_SET) if i not in CHAR_EXCLUDE]
+
+# fixed Not enough time for target transition sequence
+# GEN_CHAR_SET = SPACE_TOKEN + GEN_CHAR_SET
 CHAR_REPLACE = cf_model['Model'].get('CharReplace')
 CHAR_REPLACE = CHAR_REPLACE if CHAR_REPLACE else {}
 CHAR_SET_LEN = len(GEN_CHAR_SET)
@@ -82,7 +85,7 @@ IMAGE_WIDTH = cf_model['Model'].get('ImageWidth')
 
 """CNN"""
 CNN_STRUCTURE = cf_model.get(NEU_NAME).get('CNN')
-FILTERS = [1] + [i['Convolution'] for i in CNN_STRUCTURE]
+FILTERS = [i['Convolution'] for i in CNN_STRUCTURE]
 CONV_KSIZE = [i['ConvCoreSize'] for i in CNN_STRUCTURE]
 CONV_STRIDES = [i['ConvStrides'] for i in CNN_STRUCTURE]
 POOL_STRIDES = [i['PoolStrides'] for i in CNN_STRUCTURE]
@@ -90,7 +93,7 @@ POOL_KSIZE = [i['PoolWindowSize'] for i in CNN_STRUCTURE]
 
 """LSTM"""
 LSTM_STRUCTURE = cf_model.get(NEU_NAME).get('LSTM')
-OUT_CHANNEL = CNN_STRUCTURE[-1].get('Convolution')
+OUT_CHANNEL = CNN_STRUCTURE[-1].get('Convolution')[-1]
 NUM_HIDDEN = LSTM_STRUCTURE.get('HiddenNum')
 OUTPUT_KEEP_PROB = LSTM_STRUCTURE.get('KeepProb')
 
